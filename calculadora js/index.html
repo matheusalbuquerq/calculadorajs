@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Calculadora de Imposto de renda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Matheus Luan Simon Albuquerque">
+    <meta name="description" content="Calculadora de imposto de renda">
+    <meta name="copyright" content="© Matheus Luan Simon Albuquerque">
+
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+</head>
+<body>
+    <form>
+        <label for="nome">Nome Completo:</label>
+        <input type="text" name="nome" id="nome" />
+
+        <label for="valor">Salário bruto:</label>
+        <input type="text" name="valor" id="valor" />
+
+        <label for="dependentes">Dependentes (se não houver nenhum, digite 0):</label>
+        <input type="text" name="dependentes" id="dependentes" />
+
+        <label for="pensao">Pensão Alimentícia (se for inexistente, digite 0):</label>
+        <input type="text" name="pensao" id="pensao" />
+
+        <label for="descontos">Descontos (se forem inexistentes, digite 0):</label>
+        <input type="text" name="descontos" id="descontos" />
+
+        <input type="button" name="calcular" id="calcular" value="Calcular" onclick="Calculadora()" />
+    </form>
+
+    <div id="s_liquido">
+
+    </div>
+</body>
+<script>
+
+  
+   
+
+    function Calculadora() {
+        var Nome = document.getElementById("nome");
+        var SalarioBruto = document.getElementById("valor");
+        var Dependentes = document.getElementById("dependentes");
+        var Descontos = document.getElementById("descontos");
+        var Pensao = document.getElementById("pensao");
+        var Inss
+        
+       
+        if (SalarioBruto.value< 1045.01)
+        {
+            Inss = (SalarioBruto.value * 0.075).toFixed(2);
+        }else if (SalarioBruto.value < 2089.61)
+        {
+            Inss = (SalarioBruto.value * 0.09).toFixed(2);
+        }else if (SalarioBruto.value < 3134.41)
+        {
+            Inss = (SalarioBruto.value * 0.12).toFixed(2);
+        }else  if (SalarioBruto.value < 6101.07)
+        {
+            Inss = (SalarioBruto.value * 0.14).toFixed(2);
+        }else if (SalarioBruto.value > 6101.06)
+        {
+            Inss = 671.12;
+        }
+
+        var BaseCalculo = (SalarioBruto.value - Inss - Pensao.value - (Dependentes.value * 189.59)).toFixed(2);
+        var Deducao
+        var IrrfAliquota
+
+        if (BaseCalculo < 1903.99)
+        {
+        	IrrfAliquota = BaseCalculo*0;
+        	Deducao = 0;
+
+        }else if(BaseCalculo <1826.66)
+        {
+        	IrrfAliquota = (BaseCalculo*0.075).toFixed(2);
+        	Deducao = 142.80;
+        	
+        }else if(BaseCalculo < 3751.06)
+        {
+        	IrrfAliquota = (BaseCalculo*0.15).toFixed(2);
+        	Deducao = 354.80;
+        	
+        }else if(BaseCalculo < 4664.69)
+        {
+        	IrrfAliquota = (BaseCalculo*0.225).toFixed(2);
+        	Deducao = 636.13;
+        }else if(BaseCalculo > 4464.68)
+        {
+        	IrrfAliquota = (BaseCalculo*0.275).toFixed(2);
+        	Deducao = 869.36;
+        }
+
+
+       var DescontoIrrf = (IrrfAliquota - Deducao).toFixed(2);
+       var SalarioLiquido = (SalarioBruto.value - Inss - DescontoIrrf - Descontos.value).toFixed(2)
+
+
+        var Resultado = document.getElementById("s_liquido").innerHTML = Nome.value + ', seu salário líquido é de R$ ' + SalarioLiquido + '<br><ul><li>Salário bruto: R$ ' + SalarioBruto.value + '</li><li>Desconto INSS: R$ ' + Inss + '</li><li>Desconto IRRF: R$ ' + DescontoIrrf + '</li><li>Outros descontos: R$ ' +Descontos.value+ '</li><li>Salário líquido: R$ ' + SalarioLiquido + '</li></ul>'
+        
+
+    }
+
+</script>
+</html>
